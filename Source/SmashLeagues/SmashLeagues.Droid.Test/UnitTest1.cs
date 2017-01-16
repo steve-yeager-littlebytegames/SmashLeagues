@@ -1,5 +1,4 @@
-﻿
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace SmashLeagues.Droid.Test
 {
@@ -9,7 +8,8 @@ namespace SmashLeagues.Droid.Test
         [Test]
         public void TestMethod1()
         {
-            Assert.Pass();
+            var name = MainPage.name;
+            Assert.AreEqual("Steve", name, "Oops");
         }
     }
 }

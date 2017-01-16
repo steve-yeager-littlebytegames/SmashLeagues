@@ -9,6 +9,7 @@ namespace SmashLeagues
 {
     public partial class MainPage : ContentPage
     {
+        public static string name = "Steve";
         public MainPage()
         {
             InitializeComponent();
