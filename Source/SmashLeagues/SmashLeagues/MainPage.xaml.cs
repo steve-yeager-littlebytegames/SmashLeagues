@@ -1,20 +1,17 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace SmashLeagues
 {
     public partial class MainPage : ContentPage
     {
-        public const string ApplicationUrl = @"https://smashleagues.azurewebsites.net";
-        public static string name = "Steve";
-
-        private MobileServiceClient client;
-
         public MainPage()
         {
             InitializeComponent();
-            client = new MobileServiceClient(ApplicationUrl);
-            
         }
     }
 }

@@ -4,17 +4,8 @@
              xmlns:local="clr-namespace:SmashLeagues"
              x:Class="SmashLeagues.MainPage">
 
-  <StackLayout>
-    <Label Text="Smash Leagues" FontSize="70" VerticalTextAlignment="Center" HorizontalOptions="FillAndExpand"/>
-    <StackLayout Orientation="Horizontal">
-      <Label Text="Email"/>
-      <Entry x:Name="EmailEntry" HorizontalOptions="FillAndExpand"/>
-    </StackLayout>
-    <StackLayout Orientation="Horizontal">
-      <Label Text="Password"/>
-      <Entry x:Name="PasswordEntry" IsPassword="True" HorizontalOptions="FillAndExpand"/>
-    </StackLayout>
-    <Button Text="Login"/>
-  </StackLayout>
+  <Label Text="Welcome to Xamarin Forms!"
+           VerticalOptions="Center"
+           HorizontalOptions="Center" />
 
 </ContentPage>
