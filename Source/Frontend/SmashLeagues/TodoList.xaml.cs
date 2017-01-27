@@ -27,6 +27,7 @@ namespace SmashLeagues
 
                 buttonsPanel.Children.Add(syncButton);
             }
+            usernameLabel.Text = "Your User ID is " + App.User.UserId;
         }
 
         protected override async void OnAppearing()

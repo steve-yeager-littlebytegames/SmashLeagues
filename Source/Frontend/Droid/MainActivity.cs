@@ -12,7 +12,7 @@ namespace SmashLeagues.Droid
 {
 	[Activity (Label = "SmashLeagues.Droid",
 		Icon = "@drawable/icon",
-		MainLauncher = true,
+		MainLauncher = false,
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
 		Theme = "@android:style/Theme.Holo.Light")]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
