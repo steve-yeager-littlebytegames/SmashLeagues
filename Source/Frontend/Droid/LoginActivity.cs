@@ -14,8 +14,7 @@ namespace SmashLeagues.Droid
 
             CurrentPlatform.Init();
 
-            var client = new MobileServiceClient(Constants.ApplicationURL);
-            App.User = await client.LoginAsync(this, MobileServiceAuthenticationProvider.Google);
+            App.User = await App.Client.LoginAsync(this, MobileServiceAuthenticationProvider.Google);
 
             var intent = new Intent(this, typeof(MainActivity));
             StartActivity(intent);

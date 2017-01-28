@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -27,7 +28,14 @@ namespace SmashLeagues
 
                 buttonsPanel.Children.Add(syncButton);
             }
-            usernameLabel.Text = "Your User ID is " + App.User.UserId;
+            //UsernameLabel.Text = "Your User ID is " + App.User.UserId;
+            UpdateMessage();
+        }
+
+        private async void UpdateMessage()
+        {
+            int task = await App.Client.InvokeApiAsync<int>("Test/RandomNumber", HttpMethod.Get, null);
+            Message.Text = "Lucky Number = " + task;
         }
 
         protected override async void OnAppearing()

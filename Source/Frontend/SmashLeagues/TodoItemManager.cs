@@ -26,7 +26,6 @@ namespace SmashLeagues
     public partial class TodoItemManager
     {
         static TodoItemManager defaultInstance = new TodoItemManager();
-        MobileServiceClient client;
 
 #if OFFLINE_SYNC_ENABLED
         IMobileServiceSyncTable<TodoItem> todoTable;
@@ -38,9 +37,6 @@ namespace SmashLeagues
 
         private TodoItemManager()
         {
-            this.client = new MobileServiceClient(Constants.LocalURL);
-            client.AlternateLoginHost = new Uri(Constants.ApplicationURL);
-
 #if OFFLINE_SYNC_ENABLED
             var store = new MobileServiceSQLiteStore(offlineDbPath);
             store.DefineTable<TodoItem>();
@@ -50,7 +46,7 @@ namespace SmashLeagues
 
             this.todoTable = client.GetSyncTable<TodoItem>();
 #else
-            this.todoTable = client.GetTable<TodoItem>();
+            this.todoTable = App.Client.GetTable<TodoItem>();
 #endif
         }
 
@@ -68,7 +64,7 @@ namespace SmashLeagues
 
         public MobileServiceClient CurrentClient
         {
-            get { return client; }
+            get { return App.Client; }
         }
 
         public bool IsOfflineEnabled

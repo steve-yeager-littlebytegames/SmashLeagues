@@ -1,11 +1,18 @@
-﻿using System;
+﻿#define LOCAL
 
 namespace SmashLeagues
 {
     public static class Constants
     {
         // Replace strings with your Azure Mobile App endpoint.
-        public static string ApplicationURL = @"https://smashleagues.azurewebsites.net";
-        public static string LocalURL = @"http://192.168.1.9/SmashLeagues";
+        public const string ApplicationURL = @"https://smashleagues.azurewebsites.net";
+        public const string LocalURL = @"http://192.168.1.9/SmashLeagues";
+
+#if LOCAL
+        public const string Url = LocalURL;
+
+#else
+        public const string Url = ApplicationURL;
+#endif
     }
 }
