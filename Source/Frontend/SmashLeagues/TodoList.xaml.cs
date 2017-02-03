@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,8 +18,8 @@ namespace SmashLeagues
             manager = TodoItemManager.DefaultManager;
 
             // OnPlatform<T> doesn't currently support the "Windows" target platform, so we have this check here.
-            if (manager.IsOfflineEnabled &&
-                (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone))
+            if(manager.IsOfflineEnabled &&
+               (Device.OS == TargetPlatform.Windows || Device.OS == TargetPlatform.WinPhone))
             {
                 var syncButton = new Button
                 {
@@ -28,14 +30,31 @@ namespace SmashLeagues
 
                 buttonsPanel.Children.Add(syncButton);
             }
-            //UsernameLabel.Text = "Your User ID is " + App.User.UserId;
-            UpdateMessage();
+            UsernameLabel.Text = "Hello " + App.Username;
+            //GetUsername();
         }
 
-        private async void UpdateMessage()
+        private async void GetUsername()
         {
-            int task = await App.Client.InvokeApiAsync<int>("Test/RandomNumber", HttpMethod.Get, null);
-            Message.Text = "Lucky Number = " + task;
+
+            Dictionary<string, string> paramaters = new Dictionary<string, string>
+            {
+                {"id", App.Client.CurrentUser.UserId}
+            };
+            var task = await App.Client.InvokeApiAsync("Test/GetUser", HttpMethod.Get, paramaters);
+
+            string username;
+            if(task.HasValues)
+            {
+                username = task["username"].ToString();
+            }
+            else
+            {
+                username = "No username found";
+            }
+
+            Debug.WriteLine(task.ToString());
+            UsernameLabel.Text = "Username = " + username;
         }
 
         protected override async void OnAppearing()
@@ -62,7 +81,7 @@ namespace SmashLeagues
 
         public async void OnAdd(object sender, EventArgs e)
         {
-            var todo = new TodoItem { Name = newItemName.Text };
+            var todo = new TodoItem {Name = newItemName.Text};
             await AddItem(todo);
 
             newItemName.Text = string.Empty;
@@ -73,17 +92,20 @@ namespace SmashLeagues
         public async void OnSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var todo = e.SelectedItem as TodoItem;
-            if (Device.OS != TargetPlatform.iOS && todo != null)
+            if(Device.OS != TargetPlatform.iOS && todo != null)
             {
                 // Not iOS - the swipe-to-delete is discoverable there
-                if (Device.OS == TargetPlatform.Android)
+                if(Device.OS == TargetPlatform.Android)
                 {
                     await DisplayAlert(todo.Name, "Press-and-hold to complete task " + todo.Name, "Got it!");
                 }
                 else
                 {
                     // Windows, not all platforms support the Context Actions yet
-                    if (await DisplayAlert("Mark completed?", "Do you wish to complete " + todo.Name + "?", "Complete", "Cancel"))
+                    if(
+                        await
+                            DisplayAlert("Mark completed?", "Do you wish to complete " + todo.Name + "?", "Complete",
+                                "Cancel"))
                     {
                         await CompleteItem(todo);
                     }
@@ -111,7 +133,7 @@ namespace SmashLeagues
             {
                 await RefreshItems(false, true);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 error = ex;
             }
@@ -120,7 +142,7 @@ namespace SmashLeagues
                 list.EndRefresh();
             }
 
-            if (error != null)
+            if(error != null)
             {
                 await DisplayAlert("Refresh Error", "Couldn't refresh data (" + error.Message + ")", "OK");
             }
@@ -133,7 +155,7 @@ namespace SmashLeagues
 
         private async Task RefreshItems(bool showActivityIndicator, bool syncItems)
         {
-            using (var scope = new ActivityIndicatorScope(syncIndicator, showActivityIndicator))
+            using(var scope = new ActivityIndicatorScope(syncIndicator, showActivityIndicator))
             {
                 todoList.ItemsSource = await manager.GetTodoItemsAsync(syncItems);
             }
@@ -150,7 +172,7 @@ namespace SmashLeagues
                 this.indicator = indicator;
                 this.showIndicator = showIndicator;
 
-                if (showIndicator)
+                if(showIndicator)
                 {
                     indicatorDelay = Task.Delay(2000);
                     SetIndicatorActivity(true);
@@ -163,18 +185,24 @@ namespace SmashLeagues
 
             private void SetIndicatorActivity(bool isActive)
             {
-                this.indicator.IsVisible = isActive;
-                this.indicator.IsRunning = isActive;
+                indicator.IsVisible = isActive;
+                indicator.IsRunning = isActive;
             }
 
             public void Dispose()
             {
-                if (showIndicator)
+                if(showIndicator)
                 {
-                    indicatorDelay.ContinueWith(t => SetIndicatorActivity(false), TaskScheduler.FromCurrentSynchronizationContext());
+                    indicatorDelay.ContinueWith(t => SetIndicatorActivity(false),
+                        TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
         }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            await App.Client.LogoutAsync();
+            UsernameLabel.Text = "Not Logged In";
+        }
     }
 }
-

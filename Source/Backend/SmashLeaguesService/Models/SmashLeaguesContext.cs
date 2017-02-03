@@ -18,18 +18,22 @@ namespace SmashLeaguesService.Models
 
         private const string connectionStringName = "Name=MS_TableConnectionString";
 
-        public SmashLeaguesContext() : base(connectionStringName)
+        public SmashLeaguesContext()
+            : base(connectionStringName)
         {
-        } 
+        }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Database.SetInitializer<SmashLeaguesContext>(null);
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Conventions.Add(
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }
     }
-
 }

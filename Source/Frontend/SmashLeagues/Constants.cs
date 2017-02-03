@@ -1,4 +1,4 @@
-﻿#define LOCAL
+﻿#define LOCAL_
 
 namespace SmashLeagues
 {
