@@ -20,14 +20,14 @@ namespace SmashLeaguesService.Controllers
         //    return "Hello from custom controller!";
         //}
 
-        //[HttpGet, Route("api/Test/RandomNumber")]
-        //public int GetLuckyNumber()
-        //{
-        //    Random random = new Random();
-        //    return random.Next();
-        //}
+        [HttpGet, Route("api/Test/RandomNumber")]
+        public int GetLuckyNumber()
+        {
+            Random random = new Random();
+            return random.Next();
+        }
 
-        [HttpGet, Route("api/Test/GetUser")]
+        //[HttpGet, Route("api/Test/GetUser")]
         public User GetUser(string id)
         {
             SmashLeaguesContext ctx = new SmashLeaguesContext();
